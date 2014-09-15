@@ -24,26 +24,20 @@ def read_readme(fname):
       return ''
 
 setup(
-    name = "cisco_packaging",
-    version = "1.0.1",
+    name = "pyfdt",
+    version = "1.0.0",
     url = '',
     download_url = '',
-    license = 'Commercial',
-    description = "Python library for build images",
+    license = 'Public',
+    description = "Python library for flattened device trees",
     author = 'Russell Leake',
     author_email = 'leaker@cisco.com',
-    #packages = find_packages('.', exclude=['tests']),
     py_modules = ['dt'],
-    entry_points = {
-       'console_scripts' : [
-          'g_pack = cisco_packaging.g8:main'
-          ]
-       },
     tests_require=['pytest'],
     cmdclass={'test':PyTest},
     long_description = read_readme('README.md'),
     include_package_data = True,
     zip_safe = False,
-    install_requires = ['python_cson>=1.0.7' ],
-    keywords = 'cisco package pack packaging'
+    install_requires = ['ordered-set' ],
+    keywords = 'flattened device tree devicetree'
 )
