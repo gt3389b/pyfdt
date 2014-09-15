@@ -326,13 +326,3 @@ if __name__=='__main__':
    f = open('output', 'wb')
    f.write(x.__repr__())
    f.close()
-
-   #x = Node("test1")
-   #print x.__repr__()
-   #x.add_property("timestamp",0x53cbcc8b)
-   #x.add_property("description","Various kernels, ramdisks and FDT blobs")
-   #x.add_property("#address-cells",0x00000001)
-   #print x.__repr__()
-   #f = open('output', 'wb')
-   #f.write(x.__repr__())
-   #f.close()
