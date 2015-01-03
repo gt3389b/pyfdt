@@ -128,7 +128,7 @@ class Node:
       
    def toBin(self, add_to_stringpool):
       body = bytearray()
-      body.extend(struct.pack(">I",Node.FDT_BEGIN_NODE))   
+      body.extend(struct.pack(">I",DeviceTree.FDT_BEGIN_NODE))   
 
       # add the node name padded by null terminators
       body.extend(struct.pack(str((len(self.name)+1+3)&~0x3)+'s',self.name))
@@ -136,7 +136,7 @@ class Node:
       for key in self.properties:
          val = self.properties[key]
          #print key, val
-         body.extend(struct.pack(">I",Node.FDT_PROP))   
+         body.extend(struct.pack(">I",DeviceTree.FDT_PROP))   
          offset=add_to_stringpool(key)
          if isinstance(val, int):
             body.extend(struct.pack(">I",4))                            # len
@@ -167,15 +167,16 @@ class Node:
       for node in self.nodes:
          body.extend(node)
 
-      body.extend(struct.pack(">I",Node.FDT_END_NODE))   
+      body.extend(struct.pack(">I",DeviceTree.FDT_END_NODE))   
       return body
 
 class DeviceTree:
+   FDT_MAGIC=0xd00dfeed
    FDT_BEGIN_NODE=0x1
    FDT_END_NODE=0x2
    FDT_PROP=0x3
-   FDT_END=0x9
    FDT_NOP=0x4
+   FDT_END=0x9
 
    def __init__(self, filename=None):
       if filename:
@@ -191,7 +192,7 @@ class DeviceTree:
          data_s['offset'] = 0
 
          magic = get_uint(data_s)
-         if (magic != 0xd00dfeed):
+         if (magic != DeviceTree.FDT_MAGIC):
             raise Exception("magic failed")
 
          self.total_size = get_uint(data_s)
@@ -250,7 +251,7 @@ class DeviceTree:
 
    def toBin(self):
       body = self.processNodes()
-      body.extend(struct.pack(">I",Node.FDT_END)) 
+      body.extend(struct.pack(">I",DeviceTree.FDT_END)) 
 
       string_pool = self.get_stringpool()
 
@@ -266,7 +267,7 @@ class DeviceTree:
       version = 0x11
 
       header = bytearray()
-      header.extend(struct.pack(">I",Node.FDT_MAGIC))                                     # magic
+      header.extend(struct.pack(">I",DeviceTree.FDT_MAGIC))                               # magic
       header.extend(struct.pack(">I",off_dt_struct + size_dt_struct + size_dt_strings))   # size
       header.extend(struct.pack(">I",off_dt_struct))                                      # off_dt_struct
       header.extend(struct.pack(">I",size_dt_struct + off_dt_struct))                     # off_dt_strings
