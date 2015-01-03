@@ -8,8 +8,13 @@
 #  |                                                                         |
 #  '-------------------------------------------------------------------------'
 # Libraries
-#from cisco_packaging import utilities
-import argparse, json, logging, os, re, struct, sys
+import argparse
+import json
+import logging
+import os
+import re
+import struct
+import sys
 from ordered_set import *
 
 def get_uint(data_s):
@@ -300,17 +305,17 @@ class DeviceTree:
       return bytes(self.toBin())
 
 # Test out complex decorator
-logger = logging.getLogger('manifest')
+logger = logging.getLogger('pyfdt')
 #logger.setLevel(logging.DEBUG)
 formatter = logging.Formatter('%(levelname)s %(asctime)s %(name)s Line: %(lineno)d |  %(message)s')
 handler = logging.StreamHandler()
 handler.setFormatter(formatter)
 logger.addHandler(handler)
 
-if __name__=='__main__':
+def main():
    parser = argparse.ArgumentParser(description='Process commandline arguments')
    parser.add_argument("-i", "--input", dest="input", help="Input filename", metavar="INPUT")
-   parser.add_argument("-q", "--quiet", action="store_false", dest="verbose", default=True, help="Don't print status messages to stdout")
+   parser.add_argument("-v", "--verbose", action="store_true", dest="verbose", default=False, help="Print debut to stdout")
 
    args = parser.parse_args()
 
@@ -327,3 +332,8 @@ if __name__=='__main__':
    f = open('output', 'wb')
    f.write(x.__repr__())
    f.close()
+
+if __name__=='__main__':
+    main()
+
+# vim: tabstop=8 expandtab shiftwidth=4 softtabstop=4

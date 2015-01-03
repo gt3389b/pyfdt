@@ -35,6 +35,11 @@ setup(
     py_modules = ['dt'],
     tests_require=['pytest'],
     cmdclass={'test':PyTest},
+    entry_points = {
+       'console_scripts' : [
+          'pyfdt = dt:main'
+         ]
+       },
     long_description = read_readme('README.md'),
     include_package_data = True,
     zip_safe = False,
