@@ -1,13 +1,8 @@
 #! /usr/bin/env python
-
 #  .-------------------------------------------------------------------------.
-#  |                                                                         |
 #  |                  Flattened Device Tree                                  |
-#  |                                                                         |
 #  | Author:  Russell Leake (leaker@cisco.com)                               |
-#  |                                                                         |
 #  '-------------------------------------------------------------------------'
-# Libraries
 import argparse
 import json
 import logging
@@ -131,7 +126,10 @@ class Node:
       #print "  "+"".join(["%02x" % b for b in node])
       self.nodes.append(node)
       
-   def toBin(self, add_to_stringpool):
+   def pack(self, add_to_stringpool):
+      """
+        Pack a DT Node object into binary
+      """
       body = bytearray()
       body.extend(struct.pack(">I",DeviceTree.FDT_BEGIN_NODE))   
 
@@ -234,7 +232,7 @@ class DeviceTree:
             #print key, prop
             n.add_property(key,prop)
 
-      return n.toBin(self.add_to_stringpool)
+      return n.pack(self.add_to_stringpool)
 
    def add_to_stringpool(self, string):
       """ Adds a string to the string pool and returns its byte offset in the stringpool 
@@ -254,17 +252,23 @@ class DeviceTree:
       return self.walk("/", self.dt_struct['/'])
       #return bytearray()
 
-   def toBin(self):
+   def pack(self):
+      """
+        Pack the DT object into binary
+      """
+
+      # create the dt_structure
       body = self.processNodes()
       body.extend(struct.pack(">I",DeviceTree.FDT_END)) 
 
-      string_pool = self.get_stringpool()
+      # create the dt_strings
+      dt_strings = self.get_stringpool()
 
-      # now the we've constructed the dt_structure, we can create the header
+      # now that we've constructed the dt_structure, we can create the header
 
       # get the length of the dt_struct
       size_dt_struct = len(body)
-      size_dt_strings = len(string_pool)
+      size_dt_strings = len(dt_strings)
 
       off_mem_rsvmap = 0x28
       off_dt_struct = off_mem_rsvmap + 0x10
@@ -291,7 +295,7 @@ class DeviceTree:
       header.extend(body)
 
       # now append the dt_strings
-      header.extend(struct.pack(str(len(string_pool))+'s',string_pool))
+      header.extend(struct.pack(str(len(dt_strings))+'s',dt_strings))
 
       return header
 
@@ -302,7 +306,7 @@ class DeviceTree:
       return json.dumps(self.dt_struct, indent=3, sort_keys=True)
 
    def __repr__(self):
-      return bytes(self.toBin())
+      return bytes(self.pack())
 
 # Test out complex decorator
 logger = logging.getLogger('pyfdt')
