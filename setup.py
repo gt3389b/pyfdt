@@ -44,5 +44,6 @@ setup(
     include_package_data = True,
     zip_safe = False,
     install_requires = ['ordered-set' ],
+    test_requires = ['ordered-set'],
     keywords = 'flattened device tree devicetree'
 )
