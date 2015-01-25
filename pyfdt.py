@@ -3,6 +3,8 @@
 #  |                  Flattened Device Tree                                  |
 #  | Author:  Russell Leake (leaker@cisco.com)                               |
 #  '-------------------------------------------------------------------------'
+from __future__ import print_function
+from __future__ import unicode_literals
 import argparse
 import json
 import logging
@@ -94,10 +96,10 @@ def process_data_block(root, data_s, offset_list, string_list):
       elif token == 0x9:     # FDT_END
          return
       elif token == 0x4:     # FDT_NOP
-         print "FDT_NOP"
+         print("FDT_NOP")
          pass
       else:
-         print "unknown token: %08x" % token
+         print("unknown token: %08x" % token)
          break
 
 
@@ -114,7 +116,7 @@ class Node:
       self.name = name
       self.properties={}
       self.nodes=list()
-      print "Node name: ",self.name
+      print("Node name: ",self.name)
 
    def add_property(self, key, value):
       """ simply add a property to the node property dictionary """
@@ -331,8 +333,8 @@ def main():
       sys.exit(1)
 
    x = DeviceTree(filename=args.input)
-   print x
-   print ""
+   print(x)
+   print("")
    f = open('output', 'wb')
    f.write(x.__repr__())
    f.close()
