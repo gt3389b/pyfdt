@@ -32,12 +32,12 @@ setup(
     description = "Python library for flattened device trees",
     author = 'Russell Leake',
     author_email = 'leaker@cisco.com',
-    py_modules = ['dt'],
+    py_modules = ['pyfdt'],
     tests_require=['pytest'],
     cmdclass={'test':PyTest},
     entry_points = {
        'console_scripts' : [
-          'pyfdt = dt:main'
+          'pyfdt = pyfdt:main'
          ]
        },
     long_description = read_readme('README.md'),
